@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Silibus 30 hari Turtle Method untuk FCPO Bursa Malaysia dengan TradingView.">
+<meta name="theme-color" content="#FF4F1A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Turtle FCPO">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Turtle FCPO 30 Hari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Single bright theme by design. Layout: header stats + sticky tabs; desktop = 30-tile map left, sticky day panel right; phone = map screen ⇄ day screen with fixed action bar */
+:root{color-scheme:light;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --c-learn:#0E9F6E; --c-tv:#2563EB; --c-task:#F08A00; --long:#0E9F6E; --short:#E02424;}
+*{box-sizing:border-box}
+html,body{margin:0;background:#FFFFFF;color:#0B1220}
+body{font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,[data-act]:focus-visible{outline:3px solid #FFB020;outline-offset:2px}
+.mono{font-family:var(--mono)}
+h1,h2,h3{margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+
+/* ===== Shared components ===== */
+.blocks{display:flex;flex-direction:column;gap:14px}
+.blk{border-radius:14px;padding:14px 16px;background:#fff;border:1.5px solid #E6EAF0}
+.blk-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.blk-t{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.blk-t i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.blk-t small{font:600 12px var(--mono);color:#6B7385}
+.steps li{display:flex;gap:10px;padding:7px 0;border-top:1px solid #F0F2F6;font-size:14.8px}
+.steps li:first-child{border-top:0}
+.cb{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid #C9D0DB;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:1px;padding:0}
+.cb.on{border-color:transparent;color:#fff}
+.cb svg{width:13px;height:13px}
+.steps li.on .txt{color:#6B7385}
+.steps code,.txt code{font-family:var(--mono);font-size:.88em;background:#F1F4F9;padding:1px 5px;border-radius:5px}
+kbd{font-family:var(--mono);font-size:12px;border:1px solid #D5DBE5;border-bottom-width:2px;border-radius:5px;padding:0 5px;background:#fff}
+.tbtn{border:0;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;color:#fff}
+.doneif{border-radius:12px;padding:10px 14px;font-size:14.3px}
+.goal{font-size:15.5px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;font-size:15px}
+.btn.ghost{background:#F1F4F9;color:#0B1220}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.code{background:#0B1220;color:#DDE6F5;border-radius:14px;overflow:hidden}
+.code .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;background:#141C2E;font-size:13px;font-weight:600}
+.code .bar button{border:1px solid #33405C;background:transparent;color:#DDE6F5;border-radius:8px;padding:4px 10px;font-size:12.5px}
+.code pre{margin:0;padding:14px 16px;overflow:auto;max-height:420px;font:12.5px/1.6 var(--mono)}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.calc label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:#4A5468}
+.calc input{font:600 17px var(--mono);border:1.5px solid #D5DBE5;border-radius:10px;padding:9px 11px;width:100%;color:#0B1220;background:#fff}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.out div{border-radius:12px;padding:12px 14px;background:#F4F7FB}
+.out b{display:block;font:700 22px var(--mono);font-variant-numeric:tabular-nums;color:#0B1220}
+.out span{font-size:12.5px;color:#5B6475;font-weight:600}
+.q{border:1.5px solid #E6EAF0;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:#fff}
+.q .qh{display:flex;gap:10px;font-weight:600}
+.q .qh b{font-family:var(--mono);color:#6B7385;min-width:22px}
+.q .ans{font-size:14.3px;background:#F4F7FB;border-radius:10px;padding:8px 12px}
+.q .mk{display:flex;gap:6px}
+.q .mk button{border:1.5px solid #D5DBE5;background:#fff;border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:700}
+.q .mk button.y.on{background:#0E9F6E;border-color:#0E9F6E;color:#fff}
+.q .mk button.n.on{background:#E02424;border-color:#E02424;color:#fff}
+.gate{display:flex;gap:12px;align-items:flex-start;border:1.5px solid #E6EAF0;border-radius:14px;padding:12px 14px;background:#fff}
+.gate.on{border-color:#0E9F6E;background:#EFFBF5}
+.gate .gt{font-size:14.5px}
+.gate .gt b{display:block;font:700 12px var(--mono);letter-spacing:.06em;color:#6B7385}
+.verdict{border-radius:14px;padding:14px 16px;font-weight:700;font-size:16px}
+.verdict.ok{background:#0E9F6E;color:#fff}.verdict.no{background:#FFF4E5;color:#8A4B00}
+.tblw{overflow-x:auto;border:1.5px solid #E6EAF0;border-radius:12px}
+.tblw table{border-collapse:collapse;min-width:640px;width:100%;font-size:13px}
+.tblw th,.tblw td{padding:7px 9px;border-bottom:1px solid #EEF1F5;text-align:left}
+.tblw th{background:#F4F7FB;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#5B6475}
+.note{font-size:12.8px;color:#5B6475}
+.sec-t{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+
+/* ============ PETA (final) ============ */
+:root{--orange:#FF4F1A;--ink:#0B1220}
+.sc{font-family:"Sora",system-ui,sans-serif;background:#FFFFFF;min-height:100vh;display:flex;flex-direction:column}
+.sc .hd{padding:22px 28px 16px;border-bottom:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end;justify-content:space-between}
+.sc .hd h1{font-size:clamp(22px,4vw,30px);font-weight:800;letter-spacing:-.02em}
+.sc .hd h1 em{font-style:normal;color:var(--orange)}
+.sc .hd .bar2{height:6px;background:#EEF0F4;border-radius:99px;overflow:hidden;margin-top:10px;max-width:320px}
+.sc .hd .bar2 i{display:block;height:100%;background:var(--orange)}
+.sc .stats{display:grid;grid-template-columns:repeat(4,auto);gap:22px}
+.sc .stats div{display:flex;flex-direction:column}
+.sc .stats b{font:800 28px var(--mono);font-variant-numeric:tabular-nums;line-height:1}
+.sc .stats span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6B7385;margin-top:5px}
+.sc .tabsc{display:flex;gap:4px;padding:10px 28px;border-bottom:1px solid #EEF0F4;overflow-x:auto;scrollbar-width:none;position:sticky;top:env(safe-area-inset-top,0px);background:#fff;z-index:20}
+.sc .tabsc::-webkit-scrollbar{display:none}
+.sc .tabsc button{flex:none;border:0;background:transparent;border-radius:99px;padding:8px 15px;font-weight:600;font-size:13.5px;color:#4A5468;min-height:38px}
+.sc .tabsc button.on{background:var(--ink);color:#fff}
+.sc .body{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start;flex:1}
+.sc .gridw{padding:22px 28px 40px;display:flex;flex-direction:column;gap:14px;border-right:1px solid #EEF0F4}
+.sc .nextc{display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:14px;padding:12px 16px;background:#FFF1EC;border:0;text-align:left;width:100%}
+.sc .nextc b{display:block;font-size:15px}
+.sc .nextc span{font-size:12.5px;color:#8A3A16;font-weight:600}
+.sc .nextc i{font-style:normal;font:800 14px var(--mono);background:var(--orange);color:#fff;border-radius:10px;padding:8px 12px;flex:none}
+.sc .wrow{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:stretch}
+.sc .wl{border-radius:12px;padding:10px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;gap:6px}
+.sc .wl b{font-size:13px}.sc .wl span{font-size:11px;line-height:1.3}
+.sc .wl em{font-style:normal;font:700 12px var(--mono)}
+.sc .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:7px}
+.sc .tile{border:2px solid #E6EAF0;background:#fff;border-radius:12px;padding:8px 9px 16px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:86px;position:relative;color:#0B1220}
+.sc .tile:hover{border-color:var(--wc)}
+.sc .tile .n{font:800 18px var(--mono)}
+.sc .tile .t{font-size:11.2px;line-height:1.3;color:#4A5468;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.sc .tile.done{background:var(--wc);border-color:var(--wc)}
+.sc .tile.done .n,.sc .tile.done .t{color:#fff}
+.sc .tile.sel{box-shadow:0 0 0 3px var(--ink)}
+.sc .tile.done::after{content:"✓";position:absolute;right:8px;top:6px;color:#fff;font-weight:800}
+.sc .tile .p{position:absolute;left:9px;right:9px;bottom:7px;height:3px;border-radius:9px;background:#EEF0F4;overflow:hidden}
+.sc .tile .p i{display:block;height:100%;background:var(--wc)}
+.sc .tile.done .p{display:none}
+.sc .det{padding:22px 28px 40px;display:flex;flex-direction:column;gap:16px;position:sticky;top:59px;max-height:calc(100vh - 59px);overflow:auto}
+.sc .det .k{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.sc .det h2{font-size:24px;font-weight:700}
+.sc .det .sub{color:#5B6475;font-size:14.5px;margin-top:-8px}
+.sc .back{display:none;align-self:flex-start;border:0;background:#F1F4F9;border-radius:99px;padding:8px 14px;font-weight:600;font-size:13.5px}
+.sc .goal{border-radius:12px;padding:12px 14px;background:#FFF1EC}
+.sc .goal b{color:#D63A0C}
+.sc .cb.on{background:var(--orange)}
+.sc .doneif{background:var(--ink);color:#fff}
+.sc .btn.pri{background:var(--orange);color:#fff}
+.sc .btn.pri.off{background:#0E9F6E}
+.sc .act{display:grid;grid-template-columns:auto 1fr auto;gap:8px}
+.sc .full{padding:22px 28px 60px;display:flex;flex-direction:column;gap:16px;max-width:960px;width:100%}
+.sc h2.big{font-size:26px;font-weight:800}
+/* ---- tablet ---- */
+@media (max-width:1100px){.sc .body{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sc .wrow{grid-template-columns:1fr}.sc .wl{flex-direction:row;align-items:center;justify-content:flex-start;gap:12px}.sc .wl em{margin-left:auto}}
+/* ---- phone ---- */
+@media (max-width:820px){
+  .sc .hd{padding:16px 16px 14px;flex-direction:column;align-items:stretch;gap:14px}
+  .sc .hd .bar2{max-width:none}
+  .sc .stats{grid-template-columns:repeat(4,1fr);gap:8px}
+  .sc .stats div{background:#F4F6FA;border-radius:12px;padding:10px 8px;align-items:center;text-align:center}
+  .sc .stats b{font-size:20px}
+  .sc .stats span{font-size:9.5px;letter-spacing:.06em}
+  .sc .tabsc{padding:8px 12px}
+  .sc .body{display:block}
+  .sc .gridw{padding:16px 16px 40px;border-right:0}
+  .sc .tiles{grid-template-columns:repeat(4,1fr)}
+  .sc .tile{min-height:78px}
+  .sc.m-list .det{display:none}
+  .sc.m-det .gridw{display:none}
+  .sc .det{position:static;max-height:none;overflow:visible;padding:14px 16px 110px}
+  .sc .back{display:inline-flex}
+  .sc .act{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid #E6EAF0;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(11,18,32,.08)}
+  .sc .act .btn{padding:12px 14px}
+  .sc .full{padding:16px 16px 60px}
+  .sc .det h2{font-size:21px}
+  .blk{padding:12px 13px}
+  .steps li{font-size:14.5px}
+  .cb{width:24px;height:24px}
+}
+@media (max-width:380px){.sc .tiles{grid-template-columns:repeat(3,1fr)}}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<style>body{padding-top:env(safe-area-inset-top,0px)}</style>
+<div id="app"></div>
+<script>
+const W=[
+{t:"Minggu 1",h:"Asas FCPO, risiko & persediaan TradingView",g:"Akaun & layout TradingView siap, N & saiz unit boleh dikira sendiri, kuiz Hari 7 ≥ 8/10.",days:[
+{n:1,t:"Kenapa Turtle, dan cara kursus ini berjalan",s:"Kisah Richard Dennis & eksperimen Turtle",goal:"Faham bahawa trading boleh dipelajari melalui peraturan dan disiplin, bukan bakat.",
+ L:["Baca Siri 1 slaid 3–9: eksperimen Dennis lawan Eckhardt, cara Turtle dipilih.","Catat 3 perkara yang membuatkan Turtle berjaya."],
+ T:["Buka tradingview.com → <b>Get started</b> → daftar akaun (pelan percuma cukup).","Buka carta: klik <b>Products → Supercharts</b>.","Tetapkan zon masa: klik label masa di sudut kanan bawah carta → pilih <b>(UTC+8) Kuala Lumpur</b>.","Klik nama layout di kanan atas → <b>Rename</b> → namakan <b>Turtle FCPO</b>. Simpan."],
+ K:["Tulis dalam buku nota: kenapa saya mahu trade FCPO? Berapa modal yang saya sanggup risikokan?","Pilih waktu tetap 1 jam setiap hari (cadangan: 6:30–7:30 petang)."],
+ d:"layout “Turtle FCPO” wujud dan zon masa = Kuala Lumpur."},
+{n:2,t:"Kenali kontrak FCPO",s:"25 tan, RM25 setiap mata, bulan ketiga",goal:"Tahu nilai setiap pergerakan harga dan kontrak mana yang patut didagang.",
+ L:["Baca Siri 1 slaid 37–38 dan Siri 3 tindakan 02 & 06.","Hafal: 1 mata = RM25. Sesi: 10:30–12:30, 2:30–6:00 petang, malam T+1 9:00–11:30 (Isnin–Khamis). Had harga harian 10%. Penyelesaian melalui penghantaran fizikal."],
+ T:["Klik kotak carian simbol (kiri atas) → taip <code>FCPO</code> → pilih yang berlabel <b>MYX</b>.","<code>MYX:FCPO1!</code> ialah kontrak bersambung (bulan hadapan). Buka dulu untuk melihat sejarah harga.","Tukar timeframe kepada <b>1D</b> (harian) dan jenis carta kepada <b>Candles</b>.","Cari kontrak bulan ketiga: bulan semasa + 3. Contoh Oktober 2026 → Januari 2027. Simbol khusus biasanya berformat FCPO + kod bulan + tahun (Jan = F, Feb = G, Mac = H, Apr = J, Mei = K, Jun = M, Jul = N, Ogo = Q, Sep = U, Okt = V, Nov = X, Dis = Z). Contoh: <code>FCPOF2027</code>. Jika tidak jumpa, buka halaman FCPO1! → <b>Contracts</b> untuk senarai penuh.","Tambah kedua-dua simbol ke <b>Watchlist</b> (panel kanan → ikon <b>+</b>)."],
+ K:["Gunakan <b>Data Window</b> (panel kanan) untuk membaca high & low semalam. Kira (high − low) × RM25 = nilai pergerakan semalam bagi 1 kontrak.","Tulis nama kontrak bulan ketiga untuk bulan ini dan bulan depan."],
+ d:"anda boleh sebut nilai 1 mata, waktu sesi dan simbol kontrak bulan ketiga tanpa melihat nota."},
+{n:3,t:"Matematik trend following",s:"Expectancy, win rate & nisbah untung:rugi",goal:"Faham kenapa win rate 35–50% masih boleh untung.",
+ L:["Baca Siri 1 slaid 15–16 dan Siri 3 tindakan 01.","Formula: Expectancy = (% menang × purata untung) − (% kalah × purata rugi)."],
+ T:["Di toolbar kiri, buka kumpulan alat ramalan (Forecasting) → pilih <b>Long Position</b>.","Klik pada mana-mana lilin untuk lukis contoh trade. Seret kotak merah (stop) dan hijau (sasaran).","Perhatikan nisbah <b>Risk/Reward</b> yang dipaparkan pada alat itu.","Lukis 3 contoh: nisbah 1:1, 1:2 dan 1:3. Ini hanya untuk latihan visual, bukan peraturan Turtle."],
+ K:["Kira expectancy untuk 3 senario: (a) 50% menang, 1:1; (b) 35% menang, 1:3; (c) 70% menang, untung RM500 / rugi RM2,000.","Mana yang untung? Tulis jawapan dan sebabnya."],
+ d:"anda boleh kira expectancy sendiri dan terangkan kenapa senario (c) rugi walaupun win rate 70%."},
+{n:4,t:"N dan saiz posisi",s:"ATR 20 hari, formula unit, modal minimum",goal:"Kira N, saiz unit dan modal minimum dengan tangan.",
+ L:["Baca Siri 1 slaid 19–20, Siri 2 slaid 5, Siri 3 tindakan 03 & 08.","Unit = (1% × ekuiti) ÷ (N × RM25). Bundarkan ke bawah. Modal minimum 1 kontrak = N × RM2,500."],
+ T:["Klik <b>Indicators</b> (atas carta) → cari <b>Average True Range</b> → tambah. (Pelan percuma hadkan <b>2 indikator</b> setiap carta, jadi buang indikator lain dulu jika perlu.)","Klik ikon gear pada ATR → tab <b>Inputs</b> → <b>Length = 20</b>, smoothing <b>RMA</b> (ini kaedah Wilder, sama dengan N Turtle).","Baca nilai ATR hari ini pada status line atau Data Window. Itulah N.","Gerakkan kursor ke April 2026 dan cari nilai N tertinggi (sekitar 110+ mata pada kontrak bulan ketiga)."],
+ K:["Kira: N hari ini × RM25 = RM____ setiap N.","Dengan modal anda: unit = ____ kontrak. Modal minimum = ____.","Jika unit < 1, tulis keputusan anda: paper trade, kumpul modal, atau akaun prop."],
+ d:"angka N, unit dan modal minimum ditulis dalam buku nota."},
+{n:5,t:"Risiko 1%, stop 2N & drawdown",s:"Kenapa saiz kecil menyelamatkan akaun",goal:"Tetapkan had risiko yang tidak boleh dirunding.",
+ L:["Baca Siri 1 slaid 21 & 23, Siri 3 tindakan 04 & 18.","Peraturan drawdown: jika akaun jatuh 10%, kira saiz posisi seolah-olah ekuiti 20% lebih kecil."],
+ T:["Pilih alat <b>Long Position</b>. Letak entry pada harga tutup terakhir.","Seret stop ke harga tutup − 2N (guna nilai N dari Hari 4). Baca berapa mata risikonya.","Ulang dengan <b>Short Position</b>: stop = harga tutup + 2N.","Klik kanan pada alat → <b>Settings</b>. Masukkan saiz akaun dan risiko untuk melihat anggaran kuantiti, kemudian bandingkan dengan formula Turtle."],
+ K:["Buat jadual: baki akaun selepas 1–10 kekalahan berturut-turut pada risiko 1%, 2%, 4% dan 8% (rujuk carta Siri 3 tindakan 04).","Tulis: “Risiko maksimum saya setiap trade ialah RM____.”"],
+ d:"had risiko RM ditulis dan anda faham kenapa 8% setiap trade merosakkan akaun."},
+{n:6,t:"Falsafah & psikologi Turtle",s:"Tanpa memori, exit lebih penting, terima rugi",goal:"Bina minda “peraturan dahulu, perasaan kemudian”.",
+ L:["Baca Siri 1 slaid 10–13 dan 30–35 (Parker, Faith, Abraham).","Pilih 3 petikan dari Siri 1 slaid 35 untuk ditampal di skrin."],
+ T:["Bina watchlist “FCPO + berkait”: tambah <code>FCPO1!</code>, kontrak bulan ketiga, minyak soya CBOT (cari <code>ZL1!</code>) dan USDMYR.","Buka 2 carta sebelah-menyebelah: klik ikon <b>Select layout</b> di toolbar atas → pilih 2 panel.","Panel kiri: FCPO bulan ketiga. Panel kanan: ZL1!. Bandingkan arah pergerakan 3 bulan terakhir."],
+ K:["Tulis “kontrak dengan diri sendiri” (5 baris): apa yang saya akan buat bila kalah 3 kali berturut-turut?","Catat: adakah FCPO dan minyak soya bergerak seiring? Kenapa ini penting untuk risiko?"],
+ d:"kontrak diri ditulis dan layout 2 panel disimpan."},
+{n:7,t:"Ulangkaji Minggu 1 + kuiz",s:"Kuiz 10 soalan pantas",goal:"Pastikan asas kukuh sebelum membina sistem.",
+ L:["Ulang Siri 3 tindakan 01–06."],
+ T:["Klik <b>Settings</b> (gear carta) → <b>Symbol</b>. Cari pilihan <b>Adjust for contract changes</b> (atau butang <b>B-ADJ</b> di bawah carta) dan aktifkan untuk <code>FCPO1!</code>. Ini membuang lompatan harga ketika roll.","Aktifkan juga label <b>roll dates</b> jika ada. Perhatikan tarikh tukar kontrak.","Simpan layout (<kbd>Ctrl</kbd>+<kbd>S</kbd>)."],
+ K:["Kuiz: nilai 1 mata? Modal minimum jika N = 90? Unit untuk modal RM200k, N = 70? Stop long jika entry 4,500, N = 80? Waktu sesi malam? Kontrak bulan ketiga untuk Disember? Expectancy 40% × RM3,000 − 60% × RM1,500? Bila kurangkan saiz? Kenapa bulan spot dielakkan? Apa itu B-ADJ?","Semak jawapan dengan nota. Sasaran: ≥ 8/10."],
+ d:"<b>Pintu Minggu 1:</b> kuiz ≥ 8/10. Jika gagal, ulang Hari 2–5."}
+]},
+{t:"Minggu 2",h:"Bina sistem Turtle-SOP atas carta",g:"Skrip A dipasang, 5 paras faham, pelan trading 1 muka surat ditulis.",days:[
+{n:8,t:"Saluran Donchian 20 & 10 hari",s:"Paras entry dan exit",goal:"Kenal pasti breakout 20 hari dan paras exit 10 hari dengan mata.",
+ L:["Baca Siri 1 slaid 17–18, Siri 2 slaid 4.","Entry long: harga pecah paras tertinggi 20 hari. Exit long: pecah paras terendah 10 hari (sebaliknya untuk short)."],
+ T:["Pelan percuma hadkan 2 indikator: buang ATR dulu (klik nama ATR → ikon tong sampah). Kemudian <b>Indicators</b> → cari <b>Donchian Channels</b> → tambah → gear → <b>Length = 20</b> → warna biru.","Tambah sekali lagi Donchian Channels → <b>Length = 10</b> → warna oren, garis putus-putus.","Penting: Donchian TradingView memasukkan lilin hari ini. Isyarat Turtle = harga <b>tutup hari ini</b> melepasi garis <b>semalam</b>.","Zoom ke Jan–Sep 2026 dan cari 6 isyarat Sistem 1 dalam Siri 2 slaid 6."],
+ K:["Tanda 5 breakout 20 hari menggunakan alat <b>Arrow</b> atau <b>Text</b>.","Untuk setiap satu, catat: tarikh, arah, adakah ia menjadi trend?"],
+ d:"5 breakout ditanda dan anda faham beza “garis hari ini” dan “garis semalam”."},
+{n:9,t:"Garis tengah 55 hari",s:"Penapis arah trend SOP",goal:"Tahu bila hanya long dan bila hanya short.",
+ L:["Baca Siri 2 slaid 8, 15 dan Siri 3 tindakan 10.","Garis tengah 55 = (tertinggi 55 + terendah 55) ÷ 2. Di atas garis: long sahaja. Di bawah garis: short sahaja."],
+ T:["Buang Donchian 10 (had 2 indikator), kemudian tambah Donchian Channels baru → <b>Length = 55</b>.","Gear → tab <b>Style</b> → nyahtanda garis Upper & Lower. Tinggalkan <b>Basis</b> (garis tengah) dan tukar warna kepada ungu.","Esok semua paras (20, 10, 55 dan N) akan digabungkan dalam Skrip A, jadi hanya perlu 1 indikator.","Semak 14 Apr 2026: short Kes #2 berlaku ketika harga masih di atas garis 55, jadi SOP menolaknya."],
+ K:["Catat 3 tempoh pada 2026 bila harga di atas garis 55 dan 3 tempoh bila di bawah.","Tulis: berapa kali harga berulang-alik merentasi garis ini? Apa maksudnya?"],
+ d:"anda boleh tunjuk pada carta bila long sahaja dan bila short sahaja dibenarkan."},
+{n:10,t:"Pasang Skrip A “Turtle FCPO”",s:"Semua paras + N + saiz dalam satu indikator",goal:"Gantikan 4 indikator dengan 1 skrip yang mengira saiz anda secara automatik.",
+ L:["Baca bahagian <a href='#pine'>Skrip Pine</a> di bawah halaman ini."],
+ T:["Buang Donchian & ATR dari carta (klik nama indikator → ikon tong sampah).","Klik tab <b>Pine Editor</b> (bawah carta) → menu skrip → <b>Create new → Indicator</b>.","Padam kod contoh. Tampal Skrip A. Klik <b>Save</b>, namakan “Turtle FCPO”, kemudian <b>Add to chart</b>.","Gear skrip → <b>Inputs</b> → masukkan ekuiti akaun anda.","Baca jadual di kanan atas: N, RM setiap N, saiz unit, modal minimum, stop dan arah dibenarkan."],
+ K:["Bandingkan nilai N & unit dalam jadual dengan kiraan tangan Hari 4. Sama?","Jika ralat merah keluar semasa menyimpan, semak bahawa seluruh kod disalin (baris pertama mesti <code>//@version=5</code>)."],
+ d:"skrip dipasang dan jadual memaparkan saiz unit anda."},
+{n:11,t:"Peraturan entry: harga TUTUP + arah 55",s:"Mengelak breakout palsu",goal:"Faham kenapa isyarat sah hanya pada harga tutup.",
+ L:["Baca Siri 2 slaid 9, 13, 16 dan Siri 3 tindakan 09.","Isyarat sah → masuk pada harga buka sesi pagi (10:30) esoknya."],
+ T:["Bar Replay perlukan pelan berbayar (Essential ke atas). Ada pelan berbayar atau percubaan percuma: klik <b>Replay</b> di toolbar atas → pilih titik mula akhir Jun 2026. Pelan percuma: skrol carta ke akhir Jun 2026 dan tutup bahagian kanan carta dengan alat <b>Rectangle</b>, kemudian alihkan kotak itu ke kanan satu lilin demi satu.","Bergerak satu lilin pada satu masa (butang <b>Forward</b> atau alihkan kotak penutup) sehingga 3 Jul 2026.","Perhatikan: harga mencucuk paras terendah 20 hari secara intraday, tetapi skrip tidak memberi isyarat kerana penutupan tidak memenuhi syarat SOP.","Teruskan hingga 9 Jul dan lihat harga berpusing. Inilah Kes #4 (−RM4,125 dalam sistem asas)."],
+ K:["Dengan Replay, cari 2 lagi breakout intraday yang tidak ditutup pada 2026.","Tulis peraturan entry anda dalam satu ayat."],
+ d:"anda boleh terangkan Kes #4 dan peraturan entry tanpa melihat nota."},
+{n:12,t:"Stop 2N & exit 10 hari",s:"Biar trend berjalan",goal:"Letak stop dengan betul dan faham kenapa exit 10 hari tidak meneka puncak.",
+ L:["Baca Siri 2 slaid 7 & 10 dan Siri 3 tindakan 11–12.","Stop berkesan = paras lebih ketat antara stop 2N dan paras exit 10 hari."],
+ T:["Replay ke 5 Mac 2026. Lihat isyarat long keesokan harinya (Kes #1).","Lukis <b>Long Position</b>: entry 4,347, stop 4,197 (2N, N = 75).","Forward hingga 13 Apr. Perhatikan stop bergerak naik mengikut garis oren 10 hari sehingga harga menyentuhnya.","Kira: berapa mata dari puncak dipulangkan? Ini kos menunggu trend."],
+ K:["Ulang untuk Kes #5 (23 Jul → 18 Sep 2026).","Tulis: kenapa Turtle tidak mengambil untung pada lonjakan 9 Mac?"],
+ d:"Kes #1 & #5 diulang dengan Replay dan stop dilukis dengan betul."},
+{n:13,t:"Rollover & kos contango",s:"Tukar kontrak tanpa merosakkan sistem",goal:"Boleh roll posisi dan kira untung/rugi dengan betul.",
+ L:["Baca Siri 2 slaid 10 & 22 dan Siri 3 tindakan 14.","Roll pada hari dagangan pertama setiap bulan ke kontrak (bulan semasa + 3). Kekalkan jarak stop dalam mata."],
+ T:["Buka layout 2 panel: kiri kontrak bulan ketiga sekarang, kanan kontrak bulan ketiga bulan depan.","Bandingkan harga tutup kedua-dua kontrak pada hari yang sama. Bezanya = kos/manfaat roll.","Pada <code>FCPO1!</code>, togol butang <b>B-ADJ</b> on/off dan lihat bagaimana lompatan harga pada tarikh roll hilang."],
+ K:["Kira beza harga kontrak lama vs baru hari ini dalam mata dan RM.","Latih: posisi long, stop 120 mata di bawah harga lama → di mana stop baru selepas roll?"],
+ d:"anda boleh terangkan kenapa untung Kes #5 cuma +104 mata walaupun harga naik 236 mata."},
+{n:14,t:"Tulis pelan trading 1 muka surat",s:"6 jawapan + ulangkaji Minggu 2",goal:"Sistem lengkap, bertulis dan ditandatangan.",
+ L:["Baca Siri 1 slaid 24, Siri 2 slaid 14–17 dan Siri 3 tindakan 05."],
+ T:["Klik ikon <b>loceng/Alert</b> di toolbar kanan → <b>Create alert</b>.","Condition: pilih <b>Turtle FCPO</b> → <b>Turtle LONG</b>. Trigger: <b>Once per bar close</b>.","Tetapkan notifikasi ke aplikasi telefon TradingView. Ulang untuk <b>Turtle SHORT</b>.","Nota: pelan percuma hanya membenarkan beberapa alert aktif (sekitar 1–3), dan alert tamat selepas lebih kurang 30 hari. Tulis tarikh alert dibuat dan cipta semula bila tamat."],
+ K:["Tulis 6 jawapan: pasaran, saiz, entry, stop, exit, taktik (drawdown & roll). Tambah 7 peraturan larangan dari Siri 2 slaid 17.","Tandatangan dan tarikh. Cetak dan tampal di sebelah skrin."],
+ d:"<b>Pintu Minggu 2:</b> pelan ditandatangan (Syarat 1 ✓), 2 alert aktif, skrip memaparkan saiz yang betul."}
+]},
+{t:"Minggu 3",h:"Ujian balik: buktikan sistem dengan data",g:"Sekurang-kurangnya 30 isyarat dicatat dalam jurnal dan expectancy dikira (Syarat 2).",days:[
+{n:15,t:"Kaedah ujian balik manual",s:"Bar Replay + jurnal",goal:"Sediakan proses ujian balik yang jujur, tanpa “melihat masa depan”.",
+ L:["Baca Siri 2 slaid 3, 11 dan 23.","Peraturan: setiap keputusan dibuat pada lilin semasa sahaja. Jangan scroll ke kanan."],
+ T:["Gunakan <code>FCPO1!</code> dengan <b>B-ADJ</b> aktif untuk sejarah bersambung.","Minggu ini paling mudah dengan Bar Replay. Pertimbangkan percubaan percuma pelan Essential untuk 7 hari ini. Klik <b>Replay</b> → pilih titik mula Januari 2024 → <b>Forward</b> satu hari pada satu masa. Tanpa Replay: guna kaedah kotak <b>Rectangle</b> penutup seperti Hari 11.","Pada setiap lilin, tanya: adakah ada isyarat? Adakah posisi perlu exit?","Bina Google Sheets “Jurnal Turtle FCPO” dengan lajur di bahagian bawah halaman ini."],
+ K:["Uji Jan–Mac 2024 dan catat setiap isyarat.","Masukkan Kes #4 (Jul 2026) sebagai baris contoh."],
+ d:"Sheets jurnal wujud dan isyarat suku pertama 2024 sudah dicatat."},
+{n:16,t:"Ujian balik 2024 (Apr–Dis)",s:"Teruskan Replay",goal:"Kumpul isyarat 2024 lengkap.",
+ L:["Ulang peraturan SOP sebelum mula (pelan 1 muka surat)."],
+ T:["Replay dari April 2024 hingga Disember 2024.","Untuk setiap isyarat, lukis <b>Long/Short Position</b>: entry pada harga buka esok, stop 2N.","Catat exit apabila harga menyentuh paras 10 hari atau stop."],
+ K:["Kira bilangan isyarat 2024 dan untung/rugi dalam mata.","Catat juga isyarat yang ditolak oleh penapis 55 (untuk perbandingan)."],
+ d:"semua isyarat 2024 dalam jurnal."},
+{n:17,t:"Ujian balik 2025",s:"Tahun kedua",goal:"Tambah sampel isyarat.",
+ L:["Baca semula Siri 2 slaid 13: jangan tambah helah “naikkan win rate”."],
+ T:["Replay Januari – Disember 2025 dengan proses yang sama.","Tanpa Bar Replay: skrol manual sambil menutup bahagian kanan carta dengan alat <b>Rectangle</b> (tutup masa depan)."],
+ K:["Catat semua isyarat 2025.","Jumlah sementara isyarat (2024 + 2025): ____."],
+ d:"isyarat 2025 dicatat."},
+{n:18,t:"Ujian balik 2026 + semak dengan Siri 2",s:"Jan–Sep 2026",goal:"Pastikan keputusan anda selari dengan kajian kes.",
+ L:["Buka Siri 2 slaid 6 & 18 sebagai kunci jawapan."],
+ T:["Replay Jan – Sep 2026 menggunakan kontrak bulan ketiga atau FCPO1! B-ADJ.","Bandingkan isyarat anda dengan 3 isyarat SOP dalam Siri 2 slaid 18. Beza kecil adalah normal kerana sumber data dan kontrak mungkin berbeza."],
+ K:["Jumlah isyarat 2024–2026: sasaran ≥ 30. Jika kurang, tambah 2023.","Senaraikan sebarang perbezaan dan sebabnya."],
+ d:"≥ 30 isyarat dalam jurnal."},
+{n:19,t:"Strategy Tester (Skrip B)",s:"Ujian balik automatik",goal:"Sahkan ujian manual dengan ujian automatik.",
+ L:["Baca nota di bawah Skrip B."],
+ T:["Pine Editor → <b>Create new → Strategy</b> → tampal Skrip B → Save → <b>Add to chart</b>.","Buka tab <b>Strategy Tester</b> di bawah carta.","Baca <b>Overview</b>: Net profit, Total closed trades, Percent profitable (win rate), Max drawdown, Profit factor.","Tab <b>List of trades</b>: bandingkan setiap trade dengan jurnal manual anda."],
+ K:["Gear Skrip B → nyahtanda “Guna penapis garis tengah 55”. Catat keputusan sistem asas.","Tanda semula. Catat keputusan SOP. Mana drawdown lebih kecil?"],
+ d:"jadual perbandingan asas vs SOP siap (trade, win rate, untung, max drawdown)."},
+{n:20,t:"Analisis: expectancy, drawdown & losing streak",s:"Nombor yang menentukan",goal:"Kira statistik peribadi sistem anda.",
+ L:["Baca Siri 2 slaid 11, 19 dan Siri 3 tindakan 13."],
+ T:["Dalam Strategy Tester, buka tab <b>Performance Summary</b>: Avg winning trade, Avg losing trade, Max consecutive losses (jika dipaparkan).","Dalam tab Overview, perhatikan bentuk graf ekuiti: di mana drawdown terbesar berlaku? Klik pada kawasan itu dan lihat carta harga."],
+ K:["Dalam Sheets: kira win rate, purata untung, purata rugi, expectancy, kerugian berturut-turut terpanjang, drawdown terbesar (RM).","Soalan jujur: bolehkah saya bertahan dengan drawdown sebesar ini dengan modal saya?"],
+ d:"expectancy dan drawdown ditulis (Syarat 2 ✓)."},
+{n:21,t:"Ulangkaji Minggu 3",s:"Keputusan: teruskan, ubah, atau berhenti",goal:"Buat keputusan berdasarkan data, bukan harapan.",
+ L:["Baca Siri 2 slaid 23: had kajian & risiko curve fitting."],
+ T:["Simpan layout. Pastikan Skrip A ada di carta utama dan Skrip B boleh dibuka dalam tab layout lain.","Semak alert Turtle LONG/SHORT masih aktif (panel Alerts di kanan)."],
+ K:["Jika expectancy negatif: JANGAN tukar parameter secara rawak. Catat, teruskan ke Minggu 4 sebagai latihan disiplin, dan bincang dengan mentor.","Tulis ringkasan 5 baris tentang apa yang data beritahu anda."],
+ d:"<b>Pintu Minggu 3:</b> ≥ 30 isyarat, expectancy dikira, ringkasan ditulis."}
+]},
+{t:"Minggu 4",h:"Forward test, broker & persediaan live",g:"7 sesi rutin dengan skor disiplin 100% (Syarat 3), akaun broker & stop order diuji (Syarat 6).",days:[
+{n:22,t:"Forward test #1: rutin harian 6 petang",s:"Mula hidup sebagai trader Turtle",goal:"Jalankan rutin penuh pada pasaran sebenar (tanpa wang sebenar).",
+ L:["Baca Siri 1 slaid 39, Siri 2 slaid 20–21, Siri 3 tindakan 15–16."],
+ T:["Buka kontrak bulan ketiga. Baca jadual Skrip A: N, unit, arah dibenarkan.","Semak: adakah lilin hari ini memberi isyarat (segi tiga hijau/merah)?","Jika ada isyarat: isi senarai semak 10 kotak, kemudian rekod paper trade pada harga buka esok.","Jika tiada isyarat: catat “tiada isyarat” dalam jurnal. Itu juga disiplin."],
+ K:["Isi jurnal dengan Jenis = Paper.","Skor disiplin hari ini: 100% atau tidak?"],
+ d:"sesi forward test #1 direkodkan."},
+{n:23,t:"Forward test #2 + sesi malam & MPOB",s:"Risiko gap dan berita",goal:"Faham risiko di luar waktu rutin.",
+ L:["Baca Siri 1 slaid 38 dan Siri 2 slaid 17.","Larangan: tiada entry baru pada hari laporan MPOB (sekitar 10hb) atau pada hari had harga."],
+ T:["Jalankan rutin penuh Hari 22.","Pada carta, cari lilin dengan gap besar (harga buka jauh dari tutup semalam). Gunakan <b>Data Window</b> untuk mengukur gap dalam mata.","Tambah tarikh laporan MPOB bulan ini sebagai nota di carta (alat <b>Text</b> atau <b>Note</b>)."],
+ K:["Rekod sesi #2 dalam jurnal.","Tulis: apa tindakan saya jika harga gap melepasi stop?"],
+ d:"sesi #2 direkodkan dan tarikh MPOB ditanda."},
+{n:24,t:"Forward test #3 + pilih broker",s:"Persediaan akaun sebenar",goal:"Tahu keperluan sebenar untuk trade FCPO live.",
+ L:["Senarai semak broker: berlesen Suruhanjaya Sekuriti, margin awal FCPO, komisen setiap kontrak, platform menyokong stop order, aplikasi telefon."],
+ T:["Jalankan rutin penuh.","Di TradingView, buka panel <b>Trading Panel</b> (bawah carta) untuk melihat senarai broker yang boleh disambung. Jika broker anda tidak ada, buat order terus di platform broker. TradingView kekal sebagai alat carta."],
+ K:["Bandingkan 2–3 broker niaga hadapan: margin, komisen, platform.","Mulakan permohonan akaun (atau akaun demo jika ada)."],
+ d:"sesi #3 direkodkan dan permohonan broker dimulakan."},
+{n:25,t:"Forward test #4 + latihan order",s:"Stop order entry & stop loss",goal:"Boleh pasang order dengan betul di bawah tekanan.",
+ L:["Baca Siri 2 slaid 16: entry & stop serentak."],
+ T:["Jalankan rutin penuh.","Latih di platform broker (demo jika ada): (1) order beli pada harga buka, (2) stop loss segera selepas terisi, (3) ubah stop ke paras baru, (4) batal order.","Ulang setiap langkah 3 kali sehingga tidak perlu berfikir."],
+ K:["Catat masa yang diambil untuk pasang entry + stop: sasaran < 2 minit.","Rekod sesi #4 dalam jurnal."],
+ d:"stop order diuji 3 kali (Syarat 6 separa ✓)."},
+{n:26,t:"Forward test #5 + latihan pantas Replay",s:"20 keputusan dalam 1 jam",goal:"Latih refleks disiplin dengan banyak isyarat.",
+ L:["Baca Siri 1 slaid 9: soalan temuduga Turtle."],
+ T:["Jalankan rutin penuh dahulu (10 min).","Pilih tahun yang belum diuji (contoh 2022). Replay (atau kaedah kotak Rectangle) dengan laju dan buat 20 keputusan entry/exit tanpa berhenti.","Skor: berapa keputusan yang 100% ikut SOP?"],
+ K:["Skor latihan pantas: __ / 20.","Rekod sesi #5."],
+ d:"sesi #5 direkodkan dan skor latihan pantas ≥ 18/20."},
+{n:27,t:"Forward test #6 + senario krisis",s:"Bersedia sebelum ia berlaku",goal:"Ada tindakan bertulis untuk keadaan paling buruk.",
+ L:["Baca Siri 1 slaid 28 (kejatuhan Dennis) dan Siri 2 slaid 19."],
+ T:["Jalankan rutin penuh.","Cari pada carta FCPO1! satu hari dengan pergerakan hampir had harga. Ukur julatnya dalam mata dan RM."],
+ K:["Tulis tindakan untuk 5 senario: (1) 5 kekalahan berturut-turut, (2) gap melepasi stop, (3) pasaran kena had, (4) akaun jatuh 10%, (5) terlepas isyarat kerana sibuk.","Rekod sesi #6."],
+ d:"5 senario krisis ada jawapan bertulis."},
+{n:28,t:"Forward test #7 + keputusan modal",s:"Syarat 5",goal:"Tentukan secara jujur sama ada modal anda layak.",
+ L:["Baca Siri 3 tindakan 03 dan 20."],
+ T:["Jalankan rutin penuh.","Baca baris “Modal min. 1 kontrak” dalam jadual Skrip A hari ini."],
+ K:["Bandingkan modal anda dengan modal minimum. Layak? Ya / Tidak.","Jika tidak: pilih laluan (teruskan paper trade, kumpul modal, atau cabaran akaun prop) dan tulis tarikh semakan semula.","Kira skor disiplin 7 sesi forward test: sasaran 100% (Syarat 3)."],
+ d:"keputusan modal ditulis; 7 sesi forward test lengkap."},
+{n:29,t:"Peperiksaan akhir",s:"15 soalan · lulus 12/15",goal:"Buktikan kefahaman tanpa nota.",
+ L:["Tiada bacaan. Tutup semua nota."],
+ T:["Jalankan rutin harian seperti biasa (15 min).","Buka bahagian <a href='#exam'>Peperiksaan akhir</a> di bawah halaman ini."],
+ K:["Jawab 15 soalan dalam buku nota (30 min), kemudian semak jawapan.","Jika < 12, ulang hari yang berkaitan dan ambil semula esok."],
+ d:"skor ≥ 12/15 (Syarat 4 ✓)."},
+{n:30,t:"Hari Lesen",s:"Semakan 6 syarat & trade pertama",goal:"Mula trade live, atau teruskan latihan dengan rancangan yang jelas.",
+ L:["Baca semula 6 syarat di bahagian atas halaman ini."],
+ T:["Pastikan carta harian kontrak bulan ketiga + Skrip A + 2 alert aktif.","Masukkan ekuiti sebenar akaun broker ke dalam input Skrip A.","Semak jadual: unit ≥ 1? Arah dibenarkan?"],
+ K:["Tandakan 6 syarat. Semua lulus → anda dibenarkan trade live 1 unit apabila isyarat SOP seterusnya muncul. Kekal 1 unit untuk 20 trade live pertama.","Ada syarat gagal → tulis pelan pembetulan 2 minggu dan teruskan paper trade.","Ingat: isyarat Turtle jarang (≈ 1 setiap 4–6 minggu pada 2026). Menunggu adalah sebahagian daripada sistem."],
+ d:"keputusan Hari Lesen ditulis dan ditandatangan."}
+]}
+];
+const Q=[
+["Berapa nilai 1 mata FCPO bagi 1 kontrak?","RM25 (25 tan × RM1)."],
+["N = 80. Berapa modal minimum untuk 1 kontrak pada risiko 1%?","80 × RM2,500 = RM200,000."],
+["Ekuiti RM180,000, N = 70. Berapa unit?","1% = RM1,800; N × 25 = RM1,750; 1,800 ÷ 1,750 = 1.03 → 1 kontrak."],
+["Isyarat long sah bila…","Harga TUTUP di atas paras tertinggi 20 hari sebelumnya DAN di atas garis tengah 55 hari."],
+["Bila anda masuk selepas isyarat sah?","Pada harga buka sesi pagi (10:30) hari dagangan berikutnya, dengan stop dipasang serentak."],
+["Entry long 4,600, N = 75. Di mana stop?","4,600 − 150 = 4,450."],
+["Bila posisi long ditutup?","Bila harga menyentuh paras lebih ketat antara stop 2N dan paras terendah 10 hari."],
+["Kontrak mana yang didagang pada November 2026?","Bulan ketiga: Februari 2027."],
+["Bila roll dilakukan?","Hari dagangan pertama setiap bulan, ke kontrak (bulan semasa + 3), dengan jarak stop dalam mata dikekalkan."],
+["Akaun jatuh 10% dari puncak. Apa berlaku pada saiz?","Kira saiz seolah-olah ekuiti 20% lebih kecil."],
+["Namakan 3 keadaan TIDAK BOLEH entry.","Contoh: unit < 1; melawan garis 55; breakout tidak ditutup; hari MPOB; hari limit; bulan spot; tiada stop bertulis."],
+["Kenapa stop pulang modal @1N tidak digunakan?","Dalam ujian 2026 ia menurunkan keputusan (win rate 25%, −RM6,134). Trend dipotong terlalu awal."],
+["Win rate 40%, purata untung RM3,000, purata rugi RM1,500. Expectancy?","0.4 × 3,000 − 0.6 × 1,500 = RM300 setiap trade (positif)."],
+["Apa fungsi butang B-ADJ di TradingView?","Melaraskan carta kontrak bersambung supaya lompatan harga pada tarikh roll dibuang."],
+["Apakah KPI utama 20 trade live pertama?","Skor disiplin (ikut SOP 100%), bukan untung. Kekal 1 unit."]
+];
+const PINE_A="//@version=5\nindicator(\"Turtle FCPO \u2013 Paras & Saiz\", overlay=true)\n\n// ===== Input =====\nekuiti    = input.float(150000, \"Ekuiti akaun (RM)\", minval=1000)\nrisiko    = input.float(1.0, \"Risiko setiap unit (%)\", minval=0.1, step=0.1)\nnilaiMata = input.float(25, \"Nilai 1 mata sekontrak (RM)\")\nlenIn     = input.int(20, \"Breakout entry (hari)\")\nlenOut    = input.int(10, \"Exit (hari)\")\nlenTrend  = input.int(55, \"Garis tengah trend (hari)\")\nlenN      = input.int(20, \"Tempoh N / ATR\")\n\n// ===== Paras (guna data SEBELUM hari ini) =====\nhi20  = ta.highest(high, lenIn)[1]\nlo20  = ta.lowest(low, lenIn)[1]\nhi10  = ta.highest(high, lenOut)[1]\nlo10  = ta.lowest(low, lenOut)[1]\nmid55 = (ta.highest(high, lenTrend)[1] + ta.lowest(low, lenTrend)[1]) / 2\nN     = ta.atr(lenN)   // ATR Wilder = N Turtle\n\n// ===== Isyarat SOP: harga TUTUP + selari garis 55 =====\nlongSig  = close > hi20 and close > mid55\nshortSig = close < lo20 and close < mid55\n\nplot(hi20, \"Tinggi 20 hari\", color=color.blue, linewidth=2, style=plot.style_stepline)\nplot(lo20, \"Rendah 20 hari\", color=color.blue, linewidth=2, style=plot.style_stepline)\nplot(hi10, \"Tinggi 10 hari (exit short)\", color=color.orange, style=plot.style_stepline)\nplot(lo10, \"Rendah 10 hari (exit long)\", color=color.orange, style=plot.style_stepline)\nplot(mid55, \"Garis tengah 55 hari\", color=color.purple, linewidth=2)\nplotshape(longSig and not longSig[1], title=\"Isyarat LONG\", style=shape.triangleup, location=location.belowbar, color=color.green, size=size.small)\nplotshape(shortSig and not shortSig[1], title=\"Isyarat SHORT\", style=shape.triangledown, location=location.abovebar, color=color.red, size=size.small)\n\n// ===== Saiz posisi =====\nrmN        = N * nilaiMata\nunitMentah = (ekuiti * risiko / 100) / rmN\nunit       = math.floor(unitMentah)\n\nvar table t = table.new(position.top_right, 2, 7, bgcolor=color.new(color.black, 15), border_width=1)\nif barstate.islast\n    table.cell(t, 0, 0, \"N (mata)\", text_color=color.white)\n    table.cell(t, 1, 0, str.tostring(N, \"#.0\"), text_color=color.white)\n    table.cell(t, 0, 1, \"1N sekontrak (RM)\", text_color=color.white)\n    table.cell(t, 1, 1, str.tostring(rmN, \"#,###\"), text_color=color.white)\n    table.cell(t, 0, 2, \"Saiz unit (kontrak)\", text_color=color.white)\n    table.cell(t, 1, 2, str.tostring(unit) + \"  (\" + str.tostring(unitMentah, \"#.00\") + \")\", text_color=unit >= 1 ? color.lime : color.red)\n    table.cell(t, 0, 3, \"Modal min. 1 kontrak\", text_color=color.white)\n    table.cell(t, 1, 3, \"RM \" + str.tostring(rmN * 100 / risiko, \"#,###\"), text_color=color.white)\n    table.cell(t, 0, 4, \"Stop long (tutup \u2212 2N)\", text_color=color.white)\n    table.cell(t, 1, 4, str.tostring(close - 2 * N, \"#\"), text_color=color.white)\n    table.cell(t, 0, 5, \"Stop short (tutup + 2N)\", text_color=color.white)\n    table.cell(t, 1, 5, str.tostring(close + 2 * N, \"#\"), text_color=color.white)\n    table.cell(t, 0, 6, \"Arah dibenarkan\", text_color=color.white)\n    table.cell(t, 1, 6, close > mid55 ? \"LONG sahaja\" : \"SHORT sahaja\", text_color=close > mid55 ? color.lime : color.red)\n\nalertcondition(longSig and not longSig[1], title=\"Turtle LONG\", message=\"FCPO: isyarat LONG Turtle - tutup di atas paras 20 hari dan garis tengah 55\")\nalertcondition(shortSig and not shortSig[1], title=\"Turtle SHORT\", message=\"FCPO: isyarat SHORT Turtle - tutup di bawah paras 20 hari dan garis tengah 55\")";
+const PINE_B="//@version=5\nstrategy(\"Turtle FCPO \u2013 Ujian Balik\", overlay=true, initial_capital=150000,\n     default_qty_type=strategy.fixed, default_qty_value=1)\n\nlenIn    = input.int(20, \"Breakout entry (hari)\")\nlenOut   = input.int(10, \"Exit (hari)\")\nlenTrend = input.int(55, \"Garis tengah trend (hari)\")\nlenN     = input.int(20, \"Tempoh N / ATR\")\nguna55   = input.bool(true, \"Guna penapis garis tengah 55 (SOP)\")\n\nhi20  = ta.highest(high, lenIn)[1]\nlo20  = ta.lowest(low, lenIn)[1]\nmid55 = (ta.highest(high, lenTrend)[1] + ta.lowest(low, lenTrend)[1]) / 2\nN     = ta.atr(lenN)\n\nokL      = not guna55 or close > mid55\nokS      = not guna55 or close < mid55\nlongSig  = close > hi20 and okL\nshortSig = close < lo20 and okS\n\nvar float stopL = na\nvar float stopS = na\nflat = strategy.position_size == 0\n\n// Isyarat pada harga tutup -> order dipenuhi pada harga buka esok\nif flat and longSig\n    stopL := close - 2 * N\n    strategy.entry(\"Long\", strategy.long)\nif flat and shortSig and not longSig\n    stopS := close + 2 * N\n    strategy.entry(\"Short\", strategy.short)\n\n// Stop berkesan = paras lebih ketat antara stop 2N dan exit 10 hari\nexitL = math.max(stopL, ta.lowest(low, lenOut))\nexitS = math.min(stopS, ta.highest(high, lenOut))\nstrategy.exit(\"Keluar L\", from_entry=\"Long\", stop=exitL)\nstrategy.exit(\"Keluar S\", from_entry=\"Short\", stop=exitS)\n\nplot(hi20, \"Tinggi 20\", color=color.blue, style=plot.style_stepline)\nplot(lo20, \"Rendah 20\", color=color.blue, style=plot.style_stepline)\nplot(mid55, \"Garis 55\", color=color.purple)";
+
+const GATES=["Pelan trading 1 muka surat ditulis dan ditandatangan (6 jawapan).","Sekurang-kurangnya 30 isyarat diuji balik, dan expectancy sudah dikira.","7 sesi rutin harian (forward test) dengan skor disiplin 100%.","Peperiksaan akhir sekurang-kurangnya 12/15.","Modal ≥ N × RM2,500 (risiko 1% untuk 1 kontrak).","Akaun broker niaga hadapan siap dan cara pasang stop order sudah diuji."];
+const DAYS=[];W.forEach((w,wi)=>w.days.forEach(d=>DAYS.push(Object.assign({w:wi},d))));
+const WC=["#0EA5E9","#8B5CF6","#F59E0B","#10B981"];
+const BL=[["Belajar","0–15 min","var(--c-learn)","L",15],["TradingView","15–45 min","var(--c-tv)","T",30],["Tugasan","45–60 min","var(--c-task)","K",15]];
+const KEY="turtle-fcpo-app-v1";
+let S={sel:1,view:"day",done:{},steps:{},gates:{},exam:{},reveal:{},calc:{eq:150000,n:80,r:1}};
+try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x)S=Object.assign(S,x,{view:"day"});else{const o=JSON.parse(localStorage.getItem("turtle-fcpo-30-v1")||"{}");S.done=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nDone=()=>DAYS.filter(d=>S.done[d.n]).length;
+const nextDay=()=>(DAYS.find(d=>!S.done[d.n])||{n:30}).n;
+const CHK='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+let timer={b:null,left:0,id:null};
+
+function dayBlocks(d){
+  return `<div class="blocks">`+BL.map((b,bi)=>{
+    const items=d[b[3]];const tOn=timer.b===bi;
+    return `<section class="blk"><div class="blk-h"><div class="blk-t"><i style="background:${b[2]}"></i>${b[0]} <small>${b[1]}</small></div>
+    <button class="tbtn" style="background:${b[2]}" data-act="timer" data-b="${bi}" data-min="${b[4]}"><span class="timer" id="tm${bi}">${tOn?fmt(timer.left):"▶ "+b[4]+" min"}</span></button></div>
+    <ul class="steps">`+items.map((x,i)=>{const k=d.n+"-"+bi+"-"+i,on=!!S.steps[k];return `<li class="${on?"on":""}"><button class="cb ${on?"on":""}" data-act="step" data-k="${k}" aria-pressed="${on}" aria-label="Tanda langkah">${on?CHK:""}</button><span class="txt">${x}</span></li>`}).join("")+`</ul></section>`}).join("")+`</div>`;
+}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function doneBtn(d){const on=!!S.done[d.n];return `<button class="btn pri ${on?"off":""}" data-act="done" data-n="${d.n}">${on?"✓ Hari "+d.n+" siap — batal":"Tandakan Hari "+d.n+" siap"}</button>`}
+function calcView(){
+  const c=S.calc,rmN=c.n*25,raw=(c.eq*c.r/100)/rmN,u=Math.floor(raw),minCap=rmN*100/c.r;
+  return `<div class="calc"><label>Ekuiti akaun (RM)<input id="ceq" type="number" inputmode="numeric" value="${c.eq}"></label><label>N hari ini (mata)<input id="cn" type="number" inputmode="numeric" value="${c.n}"></label><label>Risiko setiap unit (%)<input id="cr" type="number" step="0.1" value="${c.r}"></label></div>
+  <div class="out" id="cout">${calcOut(c)}</div><p class="note">1 mata FCPO = RM25 sekontrak. Unit dibundarkan ke bawah. Jika unit = 0, jangan buka trade live.</p>`}
+function calcOut(c){const rmN=c.n*25,raw=rmN?(c.eq*c.r/100)/rmN:0,u=Math.floor(raw),minCap=c.r?rmN*100/c.r:0;
+  return `<div><span>1N sekontrak</span><b>RM${rmN.toLocaleString("en-MY")}</b></div><div style="${u>=1?"background:#E7F8EF":"background:#FDECEC"}"><span>Saiz unit</span><b style="color:${u>=1?"#0E9F6E":"#E02424"}">${u} kontrak</b><span>(${raw.toFixed(2)})</span></div><div><span>Jarak stop 2N</span><b>${2*c.n} mata</b><span>= RM${(2*rmN).toLocaleString("en-MY")} / kontrak</span></div><div><span>Modal min. 1 kontrak</span><b>RM${Math.round(minCap).toLocaleString("en-MY")}</b></div>`}
+function pineView(){return [["Skrip A · Paras & Saiz (indikator)","pa",PINE_A],["Skrip B · Ujian Balik (strategy)","pb",PINE_B]].map(x=>`<div class="code"><div class="bar"><span>${x[0]}</span><button data-act="copy" data-id="${x[1]}">Salin</button></div><pre id="${x[1]}">${esc(x[2])}</pre></div>`).join("")+
+  `<p class="note">Pine Editor (bawah carta) → Create new → Indicator/Strategy → padam kod contoh → tampal → Save → Add to chart. Skrip belum diuji dalam TradingView sebenar; uji pada Hari 10 & 19.</p>`}
+function examView(){const sc=Object.values(S.exam).filter(v=>v===1).length,ans=Object.keys(S.exam).length;
+  return `<div class="verdict ${sc>=12?"ok":"no"}">Skor: ${sc} / 15 ${ans<15?`· ${15-ans} belum ditanda`:""} ${sc>=12?"· LULUS ✓":"· lulus perlukan 12"}</div>`+
+  Q.map((q,i)=>`<div class="q"><div class="qh"><b>${i+1}</b><span>${q[0]}</span></div>${S.reveal[i]?`<div class="ans"><b>Jawapan:</b> ${q[1]}</div><div class="mk"><button class="y ${S.exam[i]===1?"on":""}" data-act="mark" data-q="${i}" data-v="1">Saya betul</button><button class="n ${S.exam[i]===0?"on":""}" data-act="mark" data-q="${i}" data-v="0">Saya salah</button></div>`:`<div class="mk"><button data-act="reveal" data-q="${i}">Lihat jawapan</button></div>`}</div>`).join("")}
+function gatesView(){const c=GATES.filter((g,i)=>S.gates[i]).length;
+  return `<div class="verdict ${c===6?"ok":"no"}">${c===6?"Semua 6 syarat lulus — anda dibenarkan trade live 1 unit apabila isyarat SOP seterusnya muncul.":`${c} / 6 syarat lulus — teruskan paper trade sehingga semua lulus.`}</div>`+
+  GATES.map((g,i)=>`<div class="gate ${S.gates[i]?"on":""}"><button class="cb ${S.gates[i]?"on":""}" style="${S.gates[i]?"background:#0E9F6E":""}" data-act="gate" data-i="${i}" aria-pressed="${!!S.gates[i]}" aria-label="Tanda syarat ${i+1}">${S.gates[i]?CHK:""}</button><div class="gt"><b>SYARAT ${i+1}</b>${g}</div></div>`).join("")}
+function journalView(){return `<div class="tblw"><table><tr><th>Tarikh</th><th>Jenis</th><th>Kontrak</th><th>Arah</th><th>N</th><th>Unit</th><th>Entry</th><th>Stop 2N</th><th>Exit</th><th>Sebab</th><th>Mata</th><th>RM</th><th>Ikut SOP?</th><th>Emosi</th></tr><tr><td>3/7/2026</td><td>Ujian balik</td><td>Okt'26</td><td>Short</td><td>82</td><td>1</td><td>4,486</td><td>4,651</td><td>4,651</td><td>Stop 2N</td><td>−165</td><td>−4,125</td><td>Tidak</td><td>—</td></tr></table></div><p class="note">Salin tajuk lajur ini ke Google Sheets. Skor disiplin = baris “Ikut SOP? Ya” ÷ jumlah baris.</p>`}
+const TOOLS=[["calc","Kalkulator saiz",calcView],["gates","Syarat lulus",gatesView],["exam","Peperiksaan",examView],["pine","Skrip Pine",pineView],["journal","Jurnal",journalView]];
+
+const isPhone=()=>window.innerWidth<=820;
+let mDet=false;
+function stepPct(d){let t=0,c=0;BL.forEach((b,bi)=>d[b[3]].forEach((x,i)=>{t++;if(S.steps[d.n+"-"+bi+"-"+i])c++}));return t?c/t:0}
+function renderC(){
+  const d=DAYS[S.sel-1],nd=nDone(),g=GATES.filter((x,i)=>S.gates[i]).length;
+  const sc=Object.values(S.exam).filter(v=>v===1).length,nx=nextDay();
+  const head=`<header class="hd"><div><h1>Turtle <em>FCPO</em> · 30 Hari</h1><div class="bar2"><i style="width:${nd/30*100}%"></i></div></div><div class="stats"><div><b>${nd}</b><span>hari siap</span></div><div><b>${30-nd}</b><span>berbaki</span></div><div><b>${g}/6</b><span>syarat</span></div><div><b>${sc}/15</b><span>ujian</span></div></div></header>`;
+  const tabs=`<nav class="tabsc">${[["day","Peta & Hari"],...TOOLS.map(t=>[t[0],t[1]])].map(t=>`<button class="${S.view===t[0]?"on":""}" data-act="${t[0]==="day"?"tab-day":"view"}" data-v="${t[0]}">${t[1]}</button>`).join("")}</nav>`;
+  if(S.view!=="day"){const t=TOOLS.find(x=>x[0]===S.view);return `<div class="sc">${head}${tabs}<div class="full"><h2 class="big">${t[1]}</h2>${t[2]()}</div></div>`}
+  const nd2=DAYS[nx-1];
+  const grid=`<div class="gridw"><button class="nextc" data-act="day" data-n="${nx}"><div><span>${nd===30?"Semua hari siap — ulang kaji bila-bila":"Sambung belajar"}</span><b>Hari ${nx}: ${nd2.t}</b></div><i>Buka →</i></button>`+W.map((w,wi)=>{const c=w.days.filter(x=>S.done[x.n]).length;return `<div class="wrow"><div class="wl" style="background:${WC[wi]}"><b>${w.t}</b><span>${w.h}</span><em>${c}/${w.days.length}</em></div><div class="tiles">${w.days.map(x=>{const p=stepPct(x);return `<button class="tile ${S.done[x.n]?"done":""} ${x.n===S.sel?"sel":""}" style="--wc:${WC[wi]}" data-act="day" data-n="${x.n}" aria-label="Hari ${x.n}: ${esc(x.t)}"><span class="n">${String(x.n).padStart(2,"0")}</span><span class="t">${x.t}</span><span class="p"><i style="width:${p*100}%"></i></span></button>`}).join("")}</div></div>`}).join("")+`</div>`;
+  const det=`<section class="det" id="det"><button class="back" data-act="back">← Peta 30 hari</button><span class="k" style="color:${WC[d.w]}">${W[d.w].t} · Hari ${d.n} / 30</span><h2>${d.t}</h2><p class="sub">${d.s}</p><p class="goal"><b>Matlamat:</b> ${d.goal}</p>${dayBlocks(d)}<p class="doneif"><b>Siap jika:</b> ${d.d}</p><div class="act"><button class="btn ghost" data-act="prev" aria-label="Hari sebelum">←</button>${doneBtn(d)}<button class="btn ghost" data-act="next" aria-label="Hari seterusnya">→</button></div></section>`;
+  return `<div class="sc ${mDet?"m-det":"m-list"}">${head}${tabs}<div class="body">${grid}${det}</div></div>`;
+}
+function render(keep){
+  const y=window.scrollY,det=$("det"),dy=det?det.scrollTop:0;
+  $("app").innerHTML=renderC();
+  if(keep){window.scrollTo(0,y);const d2=$("det");if(d2&&!isPhone())d2.scrollTop=dy}
+  ["ceq","cn","cr"].forEach(id=>{const el=$(id);if(el)el.addEventListener("input",()=>{S.calc={eq:+$("ceq").value||0,n:+$("cn").value||0,r:+$("cr").value||0};$("cout").innerHTML=calcOut(S.calc);save()})});
+}
+function goTop(){window.scrollTo(0,0);const d=$("det");if(d)d.scrollTop=0}
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]");if(!el)return;const a=el.dataset.act;let keep=true,toTop=false;
+  if(a==="day"){S.sel=+el.dataset.n;S.view="day";if(isPhone()){mDet=true;toTop=true}else{keep=true;save();render(true);goTop();return}}
+  else if(a==="tab-day"){S.view="day";mDet=false;toTop=true}
+  else if(a==="back"){mDet=false;save();render(false);const t=document.querySelector(".tile.sel");if(t)t.scrollIntoView({block:"center"});return}
+  else if(a==="view"){S.view=el.dataset.v;toTop=true}
+  else if(a==="step"){const k=el.dataset.k;S.steps[k]?delete S.steps[k]:S.steps[k]=true}
+  else if(a==="done"){const n=el.dataset.n;S.done[n]?delete S.done[n]:S.done[n]=true}
+  else if(a==="gate"){const i=el.dataset.i;S.gates[i]?delete S.gates[i]:S.gates[i]=true}
+  else if(a==="reveal"){S.reveal[el.dataset.q]=true}
+  else if(a==="mark"){S.exam[el.dataset.q]=+el.dataset.v}
+  else if(a==="prev"){S.sel=Math.max(1,S.sel-1);toTop=true}
+  else if(a==="next"){S.sel=Math.min(30,S.sel+1);toTop=true}
+  else if(a==="timer"){const b=+el.dataset.b;if(timer.b===b){clearInterval(timer.id);timer={b:null,left:0,id:null}}else{clearInterval(timer.id);timer={b,left:+el.dataset.min*60,id:setInterval(()=>{timer.left--;const t=$("tm"+timer.b);if(t)t.textContent=timer.left>0?fmt(timer.left):"Masa tamat ✓";if(timer.left<=0){clearInterval(timer.id);timer.b=null}},1000)}}}
+  else if(a==="copy"){const pre=$(el.dataset.id);navigator.clipboard.writeText(pre.textContent).then(()=>{el.textContent="Disalin ✓"}).catch(()=>{const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);el.textContent="Dipilih – tekan Ctrl+C"});return}
+  save();render(!toTop);if(toTop)goTop();
+});
+let lastPhone=isPhone();window.addEventListener("resize",()=>{const p=isPhone();if(p!==lastPhone){lastPhone=p;render(true)}});
+if(!S.sel)S.sel=nextDay();
+render(false);
+
+</script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
