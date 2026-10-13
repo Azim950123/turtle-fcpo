@@ -165,12 +165,62 @@ kbd{font-family:var(--mono);font-size:12px;border:1px solid #D5DBE5;border-botto
 }
 @media (max-width:380px){.sc .tiles{grid-template-columns:repeat(3,1fr)}}
 
+
+/* ===== NOTA (rujukan slaid) ===== */
+.rf{border:0;background:#FFF1EC;color:#C2410C;font:inherit;font-weight:700;font-size:.92em;padding:1px 8px;border-radius:99px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;margin:1px 0}
+.rf::before{content:"📖";font-size:.85em}
+.rf:hover{background:#FFE1D3}
+.nser{display:flex;gap:6px;flex-wrap:wrap}
+.nser button{border:2px solid #E6EAF0;background:#fff;border-radius:12px;padding:8px 12px;font-weight:700;font-size:13.5px;text-align:left;line-height:1.25}
+.nser button small{display:block;font-weight:500;color:#6B7385;font-size:11.5px}
+.nser button.on{border-color:#0B1220;background:#0B1220;color:#fff}.nser button.on small{color:#C9D0DB}
+.nsearch{width:100%;font:500 15px "Sora",sans-serif;border:2px solid #E6EAF0;border-radius:12px;padding:10px 14px}
+.nlist{display:flex;flex-direction:column;gap:14px}
+.nnote{border:1.5px solid #E6EAF0;border-radius:16px;padding:16px 18px;background:#fff;display:flex;flex-direction:column;gap:10px;scroll-margin-top:70px}
+.nnote.hl{border-color:#FF4F1A;box-shadow:0 0 0 3px #FFE1D3}
+.nnote .nh{display:flex;gap:12px;align-items:flex-start}
+.nnote .nb{flex:none;font:800 13px var(--mono);background:#0B1220;color:#fff;border-radius:9px;padding:5px 8px;min-width:44px;text-align:center}
+.nnote .nk{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#FF4F1A}
+.nnote h4{margin:2px 0 0;font-size:18px;line-height:1.25}
+.nbody{display:flex;flex-direction:column;gap:10px;font-size:14.8px;line-height:1.6;min-width:0}
+.nbody h3{font-size:15.5px;margin:4px 0 0}
+.nbody ul,.nbody ol{list-style:disc;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.nbody p,.nbody li{margin:0}
+.nbody blockquote{margin:0;border-left:4px solid #FF4F1A;padding:6px 12px;font-style:italic;background:#FFF7F3;border-radius:0 10px 10px 0}
+.nbody .nc{border-radius:12px;padding:10px 14px;background:#F4F6FA;display:flex;flex-direction:column;gap:6px}
+.nbody .nc-dark{background:#0B1220;color:#fff}.nbody .nc-dark h3{color:#FFC9B3}
+.nbody .nc-amber{background:#FFF4DB}.nbody .nc-rust,.nbody .nc-red{background:#FDECEC}.nbody .nc-grn{background:#E7F8EF}.nbody .nc-pur{background:#F3EAFB}
+.nbody .nf{font:600 14px var(--mono);background:#0B1220;color:#fff;border-radius:10px;padding:10px 12px}
+.nbody .nn{font:800 22px var(--mono);margin:0;color:#FF4F1A}
+.nbody .np{align-self:flex-start;width:fit-content;display:inline-block;font-size:11px;font-weight:800;background:#FFE1D3;color:#9A3412;border-radius:99px;padding:2px 8px;margin-right:6px}
+.nbody .nrow{display:grid;grid-template-columns:30px 1fr;gap:2px 10px;align-items:start}
+.nbody .nrow>*:not(.nstep){grid-column:2}
+.nbody .nstep{grid-row:1 / span 3;width:28px;height:28px;border-radius:50%;background:#0B1220;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.nbody .ntf{display:flex;flex-direction:column;gap:6px}
+.nbody .ntw{overflow-x:auto;border:1px solid #E6EAF0;border-radius:10px}
+.nbody table{border-collapse:collapse;width:100%;font-size:13px;min-width:460px}
+.nbody td,.nbody th{padding:6px 8px;border-bottom:1px solid #EEF0F4;text-align:left;vertical-align:top}
+.nbody th{background:#F4F6FA;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#5B6475}
+.nbody .nchart{border:1px solid #E6EAF0;border-radius:12px;padding:6px;background:#fff}
+.nbody .nimg,.nbody .nsvg{width:100%;height:auto;display:block}
+.nbody small{color:#6B7385}
+.sheet-bg{position:fixed;inset:0;background:rgba(11,18,32,.45);z-index:90}
+.sheet{position:fixed;z-index:91;background:#fff;font-family:"Sora",system-ui,sans-serif;color:#0B1220;display:flex;flex-direction:column;top:0;right:0;bottom:0;width:min(560px,100%);box-shadow:-10px 0 40px rgba(11,18,32,.25)}
+.sheet .sh{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;border-bottom:2px solid #0B1220}
+.sheet .sh b{flex:1;font-size:16px}
+.sheet .sh small{display:block;font-weight:500;color:#6B7385;font-size:12px}
+.sheet .sh button{border:0;background:#F1F4F9;border-radius:10px;padding:8px 12px;font-weight:700}
+.sheet .sb{overflow:auto;padding:16px 16px calc(30px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
+@media (max-width:820px){.sheet{top:auto;left:0;width:100%;height:92vh;border-radius:20px 20px 0 0}.sheet .sh{padding-top:14px;border-radius:20px 20px 0 0}}
+body.lock{overflow:hidden}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <style>body{padding-top:env(safe-area-inset-top,0px)}</style>
 <div id="app"></div>
+<div id="sheet"></div>
+<script src="notes/notes.js"></script>
 <script>
 const W=[
 {t:"Minggu 1",h:"Asas FCPO, risiko & persediaan TradingView",g:"Akaun & layout TradingView siap, N & saiz unit boleh dikira sendiri, kuiz Hari 7 ≥ 8/10.",days:[
@@ -372,7 +422,7 @@ function dayBlocks(d){
     const items=d[b[3]];const tOn=timer.b===bi;
     return `<section class="blk"><div class="blk-h"><div class="blk-t"><i style="background:${b[2]}"></i>${b[0]} <small>${b[1]}</small></div>
     <button class="tbtn" style="background:${b[2]}" data-act="timer" data-b="${bi}" data-min="${b[4]}"><span class="timer" id="tm${bi}">${tOn?fmt(timer.left):"▶ "+b[4]+" min"}</span></button></div>
-    <ul class="steps">`+items.map((x,i)=>{const k=d.n+"-"+bi+"-"+i,on=!!S.steps[k];return `<li class="${on?"on":""}"><button class="cb ${on?"on":""}" data-act="step" data-k="${k}" aria-pressed="${on}" aria-label="Tanda langkah">${on?CHK:""}</button><span class="txt">${x}</span></li>`}).join("")+`</ul></section>`}).join("")+`</div>`;
+    <ul class="steps">`+items.map((x,i)=>{const k=d.n+"-"+bi+"-"+i,on=!!S.steps[k];return `<li class="${on?"on":""}"><button class="cb ${on?"on":""}" data-act="step" data-k="${k}" aria-pressed="${on}" aria-label="Tanda langkah">${on?CHK:""}</button><span class="txt">${refLinks(x)}</span></li>`}).join("")+`</ul></section>`}).join("")+`</div>`;
 }
 function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
 function doneBtn(d){const on=!!S.done[d.n];return `<button class="btn pri ${on?"off":""}" data-act="done" data-n="${d.n}">${on?"✓ Hari "+d.n+" siap — batal":"Tandakan Hari "+d.n+" siap"}</button>`}
@@ -391,7 +441,28 @@ function gatesView(){const c=GATES.filter((g,i)=>S.gates[i]).length;
   return `<div class="verdict ${c===6?"ok":"no"}">${c===6?"Semua 6 syarat lulus — anda dibenarkan trade live 1 unit apabila isyarat SOP seterusnya muncul.":`${c} / 6 syarat lulus — teruskan paper trade sehingga semua lulus.`}</div>`+
   GATES.map((g,i)=>`<div class="gate ${S.gates[i]?"on":""}"><button class="cb ${S.gates[i]?"on":""}" style="${S.gates[i]?"background:#0E9F6E":""}" data-act="gate" data-i="${i}" aria-pressed="${!!S.gates[i]}" aria-label="Tanda syarat ${i+1}">${S.gates[i]?CHK:""}</button><div class="gt"><b>SYARAT ${i+1}</b>${g}</div></div>`).join("")}
 function journalView(){return `<div class="tblw"><table><tr><th>Tarikh</th><th>Jenis</th><th>Kontrak</th><th>Arah</th><th>N</th><th>Unit</th><th>Entry</th><th>Stop 2N</th><th>Exit</th><th>Sebab</th><th>Mata</th><th>RM</th><th>Ikut SOP?</th><th>Emosi</th></tr><tr><td>3/7/2026</td><td>Ujian balik</td><td>Okt'26</td><td>Short</td><td>82</td><td>1</td><td>4,486</td><td>4,651</td><td>4,651</td><td>Stop 2N</td><td>−165</td><td>−4,125</td><td>Tidak</td><td>—</td></tr></table></div><p class="note">Salin tajuk lajur ini ke Google Sheets. Skor disiplin = baris “Ikut SOP? Ya” ÷ jumlah baris.</p>`}
-const TOOLS=[["calc","Kalkulator saiz",calcView],["gates","Syarat lulus",gatesView],["exam","Peperiksaan",examView],["pine","Skrip Pine",pineView],["journal","Jurnal",journalView]];
+
+/* ---------- NOTA ---------- */
+const SER={1:["Siri 1","Intisari buku TurtleTrader",'slaid'],2:["Siri 2","Kajian kes FCPO 2026 + SOP",'slaid'],3:["Siri 3","20 tindakan segera",'tindakan']};
+function parsePages(t){const out=[];t.split(/,|&|\bdan\b/).forEach(p=>{const m=p.match(/(\d+)\s*[–-]\s*(\d+)/);if(m){for(let i=+m[1];i<=+m[2];i++)out.push(i)}else{const n=p.match(/\d+/);if(n)out.push(+n[0])}});return [...new Set(out)]}
+function refLinks(h){return h.replace(/Siri\s([123])\s(slaid|tindakan)\s([0-9][0-9\s–\-,&dan]*[0-9])/g,(m,ser,w,list)=>{const pg=parsePages(list);return `<button class="rf" data-act="note" data-s="${ser}" data-p="${pg.join(",")}">${m}</button>`})}
+function noteCard(ser,x,hl){const lab=SER[ser][2]==="tindakan"?"T":"S";return `<article class="nnote ${hl?"hl":""}" id="n${ser}-${x.n}" data-q="${esc((x.k+" "+x.t+" "+x.h.replace(/<[^>]+>/g," ")).toLowerCase())}"><div class="nh"><span class="nb">${lab}${String(x.n).padStart(2,"0")}</span><div><div class="nk">${x.k}</div><h4>${x.t}</h4></div></div><div class="nbody">${x.h}</div></article>`}
+function notesView(){const ser=S.ns||1;
+  return `<div class="nser">${[1,2,3].map(k=>`<button class="${ser==k?"on":""}" data-act="nser" data-s="${k}">${SER[k][0]}<small>${SER[k][1]} · ${NOTES[k].length} ${SER[k][2]}</small></button>`).join("")}</div>
+  <input class="nsearch" id="nq" type="search" placeholder="Cari dalam ${SER[ser][0]} (cth: stop 2N, Dennis, roll)…" aria-label="Cari nota">
+  <div class="nlist" id="nlist">${NOTES[ser].map(x=>noteCard(ser,x)).join("")}</div><p class="note" id="nnone" hidden>Tiada nota yang sepadan.</p>`}
+function openNote(ser,pages){
+  const items=NOTES[ser].filter(x=>pages.includes(x.n));if(!items.length)return;
+  const contig=pages.every((p,i)=>!i||p===pages[i-1]+1);const lab=`${SER[ser][0]} · ${SER[ser][2]} ${pages.length>1?(contig?pages[0]+"–"+pages[pages.length-1]:pages.join(", ")):pages[0]}`;
+  $("sheet").innerHTML=`<div class="sheet-bg" data-act="note-close"></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${lab}"><div class="sh"><b>${lab}<small>${SER[ser][1]}</small></b><button data-act="note-all" data-s="${ser}" data-p="${pages[0]}">Semua nota</button><button data-act="note-close" aria-label="Tutup">✕</button></div><div class="sb">${items.map(x=>noteCard(ser,x)).join("")}</div></aside>`;
+  document.body.classList.add("lock");
+  if(!history.state||!history.state.sheet)history.pushState({sheet:1},"");
+}
+function closeNote(fromPop){if(!$("sheet").innerHTML)return;$("sheet").innerHTML="";document.body.classList.remove("lock");if(!fromPop&&history.state&&history.state.sheet)history.back()}
+window.addEventListener("popstate",()=>closeNote(true));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeNote()});
+document.addEventListener("input",e=>{if(e.target.id!=="nq")return;const q=e.target.value.trim().toLowerCase();let n=0;document.querySelectorAll("#nlist .nnote").forEach(c=>{const ok=!q||c.dataset.q.includes(q);c.hidden=!ok;if(ok)n++});$("nnone").hidden=n>0});
+const TOOLS=[["notes","Nota",notesView],["calc","Kalkulator saiz",calcView],["gates","Syarat lulus",gatesView],["exam","Peperiksaan",examView],["pine","Skrip Pine",pineView],["journal","Jurnal",journalView]];
 
 const isPhone=()=>window.innerWidth<=820;
 let mDet=false;
@@ -404,7 +475,7 @@ function renderC(){
   if(S.view!=="day"){const t=TOOLS.find(x=>x[0]===S.view);return `<div class="sc">${head}${tabs}<div class="full"><h2 class="big">${t[1]}</h2>${t[2]()}</div></div>`}
   const nd2=DAYS[nx-1];
   const grid=`<div class="gridw"><button class="nextc" data-act="day" data-n="${nx}"><div><span>${nd===30?"Semua hari siap — ulang kaji bila-bila":"Sambung belajar"}</span><b>Hari ${nx}: ${nd2.t}</b></div><i>Buka →</i></button>`+W.map((w,wi)=>{const c=w.days.filter(x=>S.done[x.n]).length;return `<div class="wrow"><div class="wl" style="background:${WC[wi]}"><b>${w.t}</b><span>${w.h}</span><em>${c}/${w.days.length}</em></div><div class="tiles">${w.days.map(x=>{const p=stepPct(x);return `<button class="tile ${S.done[x.n]?"done":""} ${x.n===S.sel?"sel":""}" style="--wc:${WC[wi]}" data-act="day" data-n="${x.n}" aria-label="Hari ${x.n}: ${esc(x.t)}"><span class="n">${String(x.n).padStart(2,"0")}</span><span class="t">${x.t}</span><span class="p"><i style="width:${p*100}%"></i></span></button>`}).join("")}</div></div>`}).join("")+`</div>`;
-  const det=`<section class="det" id="det"><button class="back" data-act="back">← Peta 30 hari</button><span class="k" style="color:${WC[d.w]}">${W[d.w].t} · Hari ${d.n} / 30</span><h2>${d.t}</h2><p class="sub">${d.s}</p><p class="goal"><b>Matlamat:</b> ${d.goal}</p>${dayBlocks(d)}<p class="doneif"><b>Siap jika:</b> ${d.d}</p><div class="act"><button class="btn ghost" data-act="prev" aria-label="Hari sebelum">←</button>${doneBtn(d)}<button class="btn ghost" data-act="next" aria-label="Hari seterusnya">→</button></div></section>`;
+  const det=`<section class="det" id="det"><button class="back" data-act="back">← Peta 30 hari</button><span class="k" style="color:${WC[d.w]}">${W[d.w].t} · Hari ${d.n} / 30</span><h2>${d.t}</h2><p class="sub">${d.s}</p><p class="goal"><b>Matlamat:</b> ${refLinks(d.goal)}</p>${dayBlocks(d)}<p class="doneif"><b>Siap jika:</b> ${refLinks(d.d)}</p><div class="act"><button class="btn ghost" data-act="prev" aria-label="Hari sebelum">←</button>${doneBtn(d)}<button class="btn ghost" data-act="next" aria-label="Hari seterusnya">→</button></div></section>`;
   return `<div class="sc ${mDet?"m-det":"m-list"}">${head}${tabs}<div class="body">${grid}${det}</div></div>`;
 }
 function render(keep){
@@ -428,6 +499,10 @@ document.addEventListener("click",e=>{
   else if(a==="prev"){S.sel=Math.max(1,S.sel-1);toTop=true}
   else if(a==="next"){S.sel=Math.min(30,S.sel+1);toTop=true}
   else if(a==="timer"){const b=+el.dataset.b;if(timer.b===b){clearInterval(timer.id);timer={b:null,left:0,id:null}}else{clearInterval(timer.id);timer={b,left:+el.dataset.min*60,id:setInterval(()=>{timer.left--;const t=$("tm"+timer.b);if(t)t.textContent=timer.left>0?fmt(timer.left):"Masa tamat ✓";if(timer.left<=0){clearInterval(timer.id);timer.b=null}},1000)}}}
+  else if(a==="note"){openNote(+el.dataset.s,el.dataset.p.split(",").map(Number));return}
+  else if(a==="note-close"){closeNote();return}
+  else if(a==="note-all"){const ser=+el.dataset.s,p=el.dataset.p;closeNote();S.view="notes";S.ns=ser;save();render(false);setTimeout(()=>{const c=$("n"+ser+"-"+p);if(c){c.classList.add("hl");c.scrollIntoView({block:"start"})}},60);return}
+  else if(a==="nser"){S.ns=+el.dataset.s;toTop=true}
   else if(a==="copy"){const pre=$(el.dataset.id);navigator.clipboard.writeText(pre.textContent).then(()=>{el.textContent="Disalin ✓"}).catch(()=>{const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);el.textContent="Dipilih – tekan Ctrl+C"});return}
   save();render(!toTop);if(toTop)goTop();
 });

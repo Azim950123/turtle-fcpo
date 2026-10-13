@@ -1,9 +1,29 @@
 // Turtle FCPO 30 Hari — service worker
 // Bila anda kemas kini app, tukar nombor versi di bawah (v1 -> v2) supaya telefon ambil versi baru.
-const CACHE = "turtle-fcpo-v1";
+const CACHE = "turtle-fcpo-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png",
-  "./icons/apple-touch-icon.png", "./icons/favicon-32.png"];
+  "./icons/apple-touch-icon.png", "./icons/favicon-32.png",
+  "./notes/bars_rm.webp",
+  "./notes/bars_wr.webp",
+  "./notes/capital.webp",
+  "./notes/discipline.webp",
+  "./notes/equity.webp",
+  "./notes/full.webp",
+  "./notes/full_sop.webp",
+  "./notes/ladder.webp",
+  "./notes/n.webp",
+  "./notes/notes.js",
+  "./notes/payoff.webp",
+  "./notes/plan.webp",
+  "./notes/roll.webp",
+  "./notes/ruin.webp",
+  "./notes/sessions.webp",
+  "./notes/tickval.webp",
+  "./notes/z1.webp",
+  "./notes/z2.webp",
+  "./notes/z3.webp",
+  "./notes/z4.webp"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
